@@ -57,7 +57,7 @@ int dist_to_top(Token tk) {
     return -1;
 }
 
-void semantics(Node* node, int count) {
+void semantics(treeNode* node, int count) {
   
     if (node == nullptr)
         return;
