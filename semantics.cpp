@@ -1,3 +1,11 @@
+/*********************************************************
+* Author: Philip Wright                                  *
+* Project 3: Semantics                                   *
+* semantics.cpp processes the tree built in the parser   *
+* and check for errors in semantics while building       *
+* a stack of the variables that have been input from     * 
+* the parse tree                                         *
+*********************************************************/
 #include "semantics.h"
 #include <iostream>
 #include <iomanip>
