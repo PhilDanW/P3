@@ -73,172 +73,170 @@ bool var_exists(Token tk)
     return false;
 }
 
-void semantic_check(Node* node, int count)
+void semantic_check(treeNode* node, int count)
 {
     if (node == nullptr)
         return;
     if (debug1) {
-        if (node->name == "<vars>" || node->name == "<assign>") { std::cout << "Working on: " << std::setw(10) << std::left << node->name << "| Token: " << std::setw(9) << std::left << node->token_2.token_string << "| "; }  // for debugging
+        if (node->label == "<vars>" || node->name == "<assign>") { std::cout << "Working on: " << std::setw(10) << std::left << node->name << "| Token: " << std::setw(9) << std::left << node->token_2.token_string << "| "; }  // for debugging
         else { std::cout << "Working on: " << std::setw(10) << std::left << node->name << "| Token: " << std::setw(9) << std::left << node->token_1.token_string << "| "; }  // for debugging
         print_stack();
     }
-    if (node->name == "<program>")
+    if (node->label == "<program>")
     {
         int vars = 0;
-        if (node->child_1 != nullptr)
-            semantic_check(node->child_1, vars);
-        if (node->child_2 != nullptr)
-            semantic_check(node->child_2, vars);
-        if (node->child_3 != nullptr)
-            semantic_check(node->child_3, vars);
-        if (node->child_4 != nullptr)
-            semantic_check(node->child_4, vars);
+        if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, vars);
+        if (node->leaf2 != nullptr)
+            semantic_check(node->leaf2, vars);
+        if (node->leaf3 != nullptr)
+            semantic_check(node->leaf3, vars);
+        if (node->leaf4 != nullptr)
+            semantic_check(node->leaf4, vars);
     }
-    else if (node->name == "<vars>")
+    else if (node->label == "<vars>")
     {
-        int tos_distance = find(node->token_2);
+        int tos_distance = find(node->token2);
         scope = var_count;
 
         if (tos_distance == -1 || tos_distance > count)
         {
             
-            push(node->token_2);
+            push(node->token2);
             count++;
         }
         else if (tos_distance < count)
         {
-            error_declared(node->token_2.token_string);
+            error_declared(node->token2.token_string);
             exit(EXIT_FAILURE);
         }
 
-        if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
-    else if (node->name == "<block>")
+    else if (node->label == "<block>")
     {
         unsigned int num_vars = 0;
         scope = var_count;
 
-        if (node->child_1 != nullptr)
-            semantic_check(node->child_1, num_vars);
-        if (node->child_2 != nullptr)
-            semantic_check(node->child_2, num_vars);
-        if (node->child_3 != nullptr)
-            semantic_check(node->child_3, num_vars);
-        if (node->child_4 != nullptr)
-            semantic_check(node->child_4, num_vars);
+        if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, num_vars);
+        if (node->leaf2 != nullptr)
+            semantic_check(node->leaf2, num_vars);
+        if (node->leaf3 != nullptr)
+            semantic_check(node->leaf3, num_vars);
+        if (node->leaf4 != nullptr)
+            semantic_check(node->leaf4, num_vars);
 
         pop(scope);
     }
-    else if (node->name == "<expr>")
+    else if (node->label == "<expr>")
     {
-        if (node->token_1.token_ID == MINUS_TK)
+        if (node->token1.tokenID == SUBTRACT_OPERATOR)
         {
-            if (node->child_1 != nullptr)
-                semantic_check(node->child_1, count);
-            if (node->child_2 != nullptr)
-                semantic_check(node->child_2, count);
-            if (node->child_3 != nullptr)
-                semantic_check(node->child_3, count);
-            if (node->child_4 != nullptr)
-                semantic_check(node->child_4, count);
+            if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+            if (node->leaf2 != nullptr)
+                semantic_check(node->leaf2, count);
+            if (node->leaf3 != nullptr)
+                semantic_check(node->leaf3, count);
+            if (node->leaf4 != nullptr)
+                semantic_check(node->leaf4, count);
         }
-        else if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        else if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
-    else if (node->name == "<N>")
+    else if (node->label == "<N>")
     {
-        if (node->token_1.token_ID == SLASH_TK || node->token_1.token_ID == ASTERISK_TK)
+        if (node->token1.tokenID == DIVIDE_OPERATOR || node->token1.tokenID == ASTERISK_OPERATOR)
         {
-            if (node->child_1 != nullptr)
-                semantic_check(node->child_1, count);
-            if (node->child_2 != nullptr)
-                semantic_check(node->child_2, count);
-            if (node->child_3 != nullptr)
-                semantic_check(node->child_3, count);
-            if (node->child_4 != nullptr)
-                semantic_check(node->child_4, count);
+            if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+            if (node->leaf2 != nullptr)
+                semantic_check(node->leaf2, count);
+            if (node->leaf3 != nullptr)
+                semantic_check(node->leaf3, count);
+            if (node->leaf4 != nullptr)
+                semantic_check(node->leaf4, count);
         }
-        else if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        else if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
-    else if (node->name == "<M>")
+    else if (node->label == "<M>")
     {
-        if (node->token_1.token_ID == ASTERISK_TK)
+        if (node->token1.tokenID == ASTERISK_OPERATOR)
         {
-            if (node->child_1 != nullptr)
-                semantic_check(node->child_1, count);
-            if (node->child_2 != nullptr)
-                semantic_check(node->child_2, count);
-            if (node->child_3 != nullptr)
-                semantic_check(node->child_3, count);
-            if (node->child_4 != nullptr)
-                semantic_check(node->child_4, count);
+            if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+            if (node->leaf2 != nullptr)
+                semantic_check(node->leaf2, count);
+            if (node->leaf3 != nullptr)
+                semantic_check(node->leaf3, count);
+            if (node->leaf4 != nullptr)
+                semantic_check(node->leaf4, count);
         }
-        else if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
-    }
-
-
-
-    else if (node->name == "<A>")
-    {
-        if (node->token_1.token_ID == PLUS_TK)
-        {
-            if (node->child_1 != nullptr)
-                semantic_check(node->child_1, count);
-            if (node->child_2 != nullptr)
-                semantic_check(node->child_2, count);
-            if (node->child_3 != nullptr)
-                semantic_check(node->child_3, count);
-            if (node->child_4 != nullptr)
-                semantic_check(node->child_4, count);
-        }
-        else if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        else if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
 
-    else if (node->name == "<R>")
+    else if (node->label == "<A>")
     {
-        if (node->token_1.token_ID == ID_TK)
+        if (node->token1.tokenID == ADD_OPERATOR)
         {
-            if (!var_exists(node->token_1))
+            if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+            if (node->leaf2 != nullptr)
+                semantic_check(node->leaf2, count);
+            if (node->leaf3 != nullptr)
+                semantic_check(node->leaf3, count);
+            if (node->leaf4 != nullptr)
+                semantic_check(node->leaf4, count);
+        }
+        else if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+    }
+
+    else if (node->label == "<R>")
+    {
+        if (node->token1.tokenID == IDENTIFIER)
+        {
+            if (!var_exists(node->token1))
             {
-                error_declared(node->token_1.token_string);
+                error_declared(node->token1.token_string);
                 exit(EXIT_FAILURE);
             }
         }
-        else if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        else if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
-    else if (node->name == "<in>")
+    else if (node->label == "<in>")
     {
-        if (!var_exists(node->token_2))
+        if (!var_exists(node->token2))
         {
-            error_declared(node->token_1.token_string);
+            error_declared(node->token1.token_string);
             exit(EXIT_FAILURE);
         }
     }
-    else if (node->name == "<assign>")
+    else if (node->label == "<assign>")
     {
-        if (!var_exists(node->token_2))
+        if (!var_exists(node->token2))
         {
-            error_declared(node->token_2.token_string);
+            error_declared(node->token2.token_string);
             exit(EXIT_FAILURE);
         }
-        if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
+        if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
     }
     else
     {
-        if (node->child_1 != nullptr)
-            semantic_check(node->child_1, count);
-        if (node->child_2 != nullptr)
-            semantic_check(node->child_2, count);
-        if (node->child_3 != nullptr)
-            semantic_check(node->child_3, count);
-        if (node->child_4 != nullptr)
-            semantic_check(node->child_4, count);
+        if (node->leaf1 != nullptr)
+            semantic_check(node->leaf1, count);
+        if (node->leaf2 != nullptr)
+            semantic_check(node->leaf2, count);
+        if (node->leaf3 != nullptr)
+            semantic_check(node->leaf3, count);
+        if (node->leaf4 != nullptr)
+            semantic_check(node->leaf4, count);
     }
 }
 
