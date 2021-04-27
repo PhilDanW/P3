@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     else { 
         std::cout << "Beginning to build the parse tree!" << std::endl;
         treeNode* root = parser(); // run parser
-        semantics(root, 0);      // check parsed tokens semantics
+        semantic_check(root, 0);      // check parsed tokens semantics
         inputFile.close(); // close file    
     }
     return 0;
