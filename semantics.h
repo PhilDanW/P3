@@ -1,15 +1,17 @@
 #ifndef SEMANTICS_H
 #define SEMANTICS_H
 #include "token.h"
-#include "treeNode.h"
+#include "node.h"
 
-void build();
-void pushStack(Token tk);
-void popStack(int start);
-bool if_var(Token tk);
-int dist_to_top(Token tk);
-void semantics(treeNode* node, int count);
+void push(Token tk);
+void pop(int scope_begin);
+void build_stack();
+int find(Token tk);
+bool var_exists(Token tk);
 void print_stack();
-void errorFound(std::string string);
+void semantic_check(Node* node, int count);
+
+void error_declared(std::string tokenString);
+
 
 #endif
