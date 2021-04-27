@@ -1,6 +1,6 @@
 /***********************************************************
 * Author: Philip Wright                                    *
-* Project 2: Parse r                                       *
+* Project 3: Semantics                                     *
 * scanner.cpp loops is passed the file from testScanner.cpp*
 * and defines the FSA table, keywords, symbols and         *
 * possible end states of the given tokens. and begins      *
