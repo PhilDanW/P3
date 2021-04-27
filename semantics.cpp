@@ -6,11 +6,13 @@
 
 Token stack[MAX_SIZE];
 
-bool bugs1 = true;
-bool bugs2 = true;
-
 int variables = 0;
 int scope = 0;
+
+void build(){
+    for (int i = 0; i <= MAX_SIZE; i++)
+        stack[i].token_string = "";
+}
 
 void pushStack(Token tk) {
   if(variables < MAX_SIZE) {
@@ -32,9 +34,8 @@ void pushStack(Token tk) {
 
 void popStack(int start) {
     for(int i = variables; i > start; i--) {
-        stack[i-1].token_string = "";
         variables--;
-        print_stack();
+        stack[i].token_string == "";
     }
 }
 
@@ -58,9 +59,18 @@ int dist_to_top(Token tk) {
 
 void semantics(Node* node, int count) {
   
+    if (node == nullptr)
+        return;
     if(node->name == "<program>") {
-        int num = 0;
-        nodeCheck(node, num);
+        int vars = 0;
+        if (node->child1 != nullptr)
+            semantics(node->child1, vars);
+        if (node->child2 != nullptr)
+            semantics(node->child2, vars);
+        if (node->child3 != nullptr)
+            semantics(node->child3, vars);
+        if (node->child4 != nullptr)
+            semantics(node->child4, vars);
     }
     else if(node->name == "<vars>") {
         int distance = dist_to_top(node->token2);
@@ -68,49 +78,86 @@ void semantics(Node* node, int count) {
       
         if(distance == -1 || distance > count) {
             pushStack(node->token2);
-            num++;
+            count++;
         }
         else if(distance < count) {
             errorFound(node->token2.token_string);
-            exit(FAILURE);
+            exit(EXIT_FAILURE);
         }
       
         if(node->child1 != nullptr) 
             semantics(node->child1, count);
     }
     else if(node->name == "<block>") {
-        unsigned int vars = 0;
+        unsigned int num_vars = 0;
         scope = variables;
       
-        nodeCheck(node, vars);
+        if (node->child1 != nullptr)
+            semantics(node->child1, num_vars);
+        if (node->child2 != nullptr)
+            semantics(node->child2, num_vars);
+        if (node->child3 != nullptr)
+            semantics(node->child3, num_vars);
+        if (node->child4 != nullptr)
+            semantics(node->child4, num_vars);
+      
         popStack(scope);
     }
     else if(node->name == "<expr>") {
         if(node->token1.tokenID == SUBTRACT_OPERATOR) {
-            nodeCheck(node, count);
+            if (node->child1 != nullptr)
+                semantics(node->child1, count);
+            if (node->child2 != nullptr)
+                semantics(node->child2, count);
+            if (node->child3 != nullptr)
+                semantics(node->child3, count);
+            if (node->child4 != nullptr)
+                semantics(node->child4, count);
         }
         else if(node->child1 != nullptr)
-            nodeCheck(node->child1, count);
+            semantics(node->child1, count);
     }
     else if(node->name == "<N>") {
         if(node->token1.tokenID == DIVIDE_OPERATOR || node->token1.token_ID == ASTERISK_OPERATOR) {
-            nodeCheck(node, count);
+            if (node->child1 != nullptr)
+                semantics(node->child1, count);
+            if (node->child2 != nullptr)
+                semantics(node->child2, count);
+            if (node->child3 != nullptr)
+                semantics(node->child3, count);
+            if (node->child4 != nullptr)
+                semantics(node->child4, count);
         }
         else if(node->child1 != nullptr)
-            nodeCheck(node->child1, index);
+            semantics(node->child1, index);
     }
     else if(node->name == "<M>") {
         if(node->token1.tokenID == ASTERISK_OPERATOR) {
-            nodeCheck(node, count);
+            if (node->child1 != nullptr)
+                semantics(node->child1, count);
+            if (node->child2 != nullptr)
+                semantics(node->child2, count);
+            if (node->child3 != nullptr)
+                semantics(node->child3, count);
+            if (node->child4 != nullptr)
+                semantics(node->child4, count);
         }
         else if(node->child1 != nullptr)
-            nodeCheck(node->child1, count);
-    }else if(node->name == "<A>") {
+            semantics(node->child1, count);
+    }
+    else if(node->name == "<A>") {
         if(node->token1.tokenID == ADD_OPERATOR){
-            nodeCheck(node, count);
+            if (node->child1 != nullptr)
+                semantics(node->child1, count);
+            if (node->child2 != nullptr)
+                semantics(node->child2, count);
+            if (node->child3 != nullptr)
+                semantics(node->child3, count);
+            if (node->child4 != nullptr)
+                semantics(node->child4, count);
         }
         else if(node->child1 != nullptr)
-            nodeCheck(node->child1, count);
+            semantics(node->child1, count);
     }
     else if (node->name == "<R>"){
         if(node->token1.tokenID == IDENTIFIER){
@@ -120,7 +167,7 @@ void semantics(Node* node, int count) {
             }
         }
         else if (node->child1 != nullptr)
-            checkNode(node->child1, count);
+            semantics(node->child1, count);
     }
     else if (node->name == "<in>"){
         if (!if_var(node->token2)){
@@ -134,23 +181,18 @@ void semantics(Node* node, int count) {
             exit(EXIT_FAILURE);
         }
         if (node->child1 != nullptr)
-            nodeCheck(node->child1, count);
+            semantics(node->child1, count);
     }
     else {
-    nodeCheck(node, count);
+        if (node->child1 != nullptr)
+            semantics(node->child1, count);
+        if (node->child2 != nullptr)
+            semantics(node->child2, count);
+        if (node->child3 != nullptr)
+            semantics(node->child3, count);
+        if (node->child4 != nullptr)
+            semantics(node->child4, count);
     }
-}
-
-void nodeCheck(Node* node, int count)
-{
-    if (node->child1 != nullptr)
-        nodeCheck(node->child1, count);
-    if (node->child2 != nullptr)
-        nodeCheck(node->child2, count);
-    if (node->child3 != nullptr)
-        nodeCheck(node->child3, count);
-    if (node->child4 != nullptr)
-        nodeCheck(node->child4, count);
 }
 
 void print_stack() {
