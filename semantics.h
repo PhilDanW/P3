@@ -3,6 +3,7 @@
 #include "token.h"
 #include "treeNode.h"
 
+void build();
 void pushStack(Token tk);
 void popStack(int start);
 bool if_var(Token tk);
