@@ -16,7 +16,7 @@ void build(){
 
 void pushStack(Token tk) {
   if(variables < MAX_SIZE) {
-      for(int i = scope; i < variables, i++) {
+      for(int i = scope; i < variables; i++) {
           if(stack[i].token_string == tk.token_string) {
               std::cout << "ERROR: Semantics error detected: " << tk.token_string << " has already been declared in this scope." << std::endl;
               exit(EXIT_FAILURE);
@@ -129,7 +129,7 @@ void semantics(treeNode* node, int count) {
                 semantics(node->leaf4, count);
         }
         else if(node->leaf1 != nullptr)
-            semantics(node->leaf1, index);
+            semantics(node->leaf1, count);
     }
     else if(node->label == "<M>") {
         if(node->token1.tokenID == ASTERISK_OPERATOR) {
@@ -199,8 +199,8 @@ void print_stack() {
     std::cout << "Current Token Stack: ";
     int count;
     for (count = 0; count < 100; count++) {
-        std::cout << stack[i].token_string << "";
-        if (stack[i].token_string == "")break;
+        std::cout << stack[count].token_string << "";
+        if (stack[count].token_string == "")break;
     }
 
     std::cout << std::endl;
