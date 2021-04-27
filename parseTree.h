@@ -1,6 +1,6 @@
 /*********************************************************
 * Author: Philip Wright                                  *
-* Project 2: Parse r                                     *
+* Project 3: Semantics                                   *
 * parseTree.h holds the function definitions of          *
 * parseTree.cpp                                          *
 **********************************************************/
