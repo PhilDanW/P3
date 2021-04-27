@@ -1,3 +1,8 @@
+/*********************************************************
+* Author: Philip Wright                                  *
+* Project 3: Semantics                                   *
+* semantics.h contains function defintions for the .cpp  *
+*********************************************************/
 #ifndef SEMANTICS_H
 #define SEMANTICS_H
 #include "token.h"
